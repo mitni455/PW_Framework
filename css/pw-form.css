@@ -17,11 +17,6 @@
 
 /* text/fonts */
 .pw-form { color:#222; margin-top: 0.5em; }
-.pw-form .label { font-size:13px; }
-
-.pw-form input[type="text"],
-.pw-form input[type="password"],
-.pw-form textarea { }
 .pw-form em { color:#c00; font-weight:bold; }
 
 /* fields */

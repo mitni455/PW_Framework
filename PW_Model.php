@@ -57,8 +57,25 @@ class PW_Model extends PW_Object
 	
 	
 	/**
+	 * @var array An array or list of arrays to make up the contextual help tab
+	 * Arrays in list should contain $id, $title, $content, $callback {@link http://codex.wordpress.org/Function_Reference/add_help_tab}
+	 * @since 0.1
+	 */
+	protected $_help_tab;
+	
+	
+	/**
+	 * @var string The HTML to set in the help sidebar {@link http://codex.wordpress.org/Function_Reference/set_help_sidebar}
+	 * @since 0.1
+	 */
+	protected $_help_sidebar;
+	
+	
+	/**
 	 * @var string HTML content for the contextual help section on a settings page
 	 * @since 0.1
+	 * @deprecated 0.1.2
+	 * @deprecated Use $_help_tab and/or $_help_sidebar instead
 	 */
 	protected $_help;
 	

@@ -89,11 +89,6 @@ class PW_ModelController extends PW_Controller
 		// add the settings page and store it in a variable
 		$submenu = add_submenu_page( $this->_model->admin_page, $this->_model->title, $this->_model->title, $this->_model->capability, $this->_model->name, array($this, 'render_settings_page') );
 		
-		// add contextual help to the settings page if it's specified in the model
-		if ($this->model->help) {
-			add_contextual_help( $submenu, $this->model->help );
-		}
-		
 		// add a hook to run only when we're on the settings page
 		add_action( 'load-' . $submenu, array($this, 'on_settings_page') );
 	}
@@ -137,6 +132,37 @@ class PW_ModelController extends PW_Controller
 		// register the settings page scripts and styles
 		$this->_scripts[] = array( 'pw-ajax-validation', PW_FRAMEWORK_URL . '/js/ajax-validation.js', array('jquery','json2'), false, true );
 		$this->_styles[] = array( 'pw-form', PW_FRAMEWORK_URL . '/css/pw-form.css' );
+		
+		
+		// add contextual help to the settings page if it's specified in the model
+		$screen = get_current_screen();
+
+  	if ( method_exists( $screen, 'add_help_tab' ) ) {
+  	  // WordPress 3.3
+  		if ( $this->model->help_tab ) { 
+  		  
+  		  // convert $this->model->help_tab to an array of arrays if it's just a single array
+  		  if ( isset($this->model->help_tab['title']) ) {
+  		    $this->model->help_tab = array( $this->model->help_tab );
+  		  }
+  		  
+    		foreach( $this->model->help_tab as $help) {
+    		  $screen->add_help_tab( $help );
+    		}
+  		} else if ( $this->model->help ) { // depricated
+  		  add_contextual_help( $screen, $this->model->help );
+  		}
+
+      // http://codex.wordpress.org/Function_Reference/set_help_sidebar
+      if ( $this->model->help_sidebar ) {
+  		  $screen->set_help_sidebar( $this->model->help_sidebar );
+		  }  		
+  	} else {
+  	  // WordPress < 3.2
+  	  if ( $this->model->help ) {
+  		  add_contextual_help( $screen, $this->model->help );
+		  }
+  	}
 	}
 	
 	
