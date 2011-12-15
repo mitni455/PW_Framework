@@ -95,8 +95,7 @@ class PW_Controller extends PW_Object
 	public function on_public_page()
 	{
 		// add the hooks to enqueue the appropriate public scripts and styles
-		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_scripts') );
-		add_action( 'wp_print_styles', array($this, 'print_styles') );
+		add_action( 'wp_enqueue_scripts', array($this, 'enqueue_scripts_and_styles') );
 	}
 
 
@@ -106,8 +105,7 @@ class PW_Controller extends PW_Object
 	 */
 	public function on_admin_page()
 	{
-		add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts') );
-		add_action( 'admin_print_styles', array($this, 'print_styles') );
+		add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts_and_styles') );
 		
 		// Register the admin_notices hook which calls PW_Alerts
 		add_action( 'admin_notices', array('PW_Alerts', 'render') );		
@@ -146,29 +144,20 @@ class PW_Controller extends PW_Object
 	 * Called from either the wp_enqueue_scripts or admin_enqueue_scripts hook
 	 * @since 0.1
 	 */
-	public function enqueue_scripts()
+	public function enqueue_scripts_and_styles()
 	{
+		// scripts
 		foreach ($this->_scripts as $script)
 		{
 			call_user_func_array( 'wp_enqueue_script', $script );
 		}
-	}
-	
-	
-	/**
-	 * Prints all the styles in $this->_styles.
-	 * Called from either the wp_print_styles or admin_print_styles hook
-	 * @since 0.1
-	 */
-	public function print_styles()
-	{
-		global $wp_styles;
 		
+		// styles
+		global $wp_styles;
 		foreach ($this->_styles as $style)
 		{
 			call_user_func_array( 'wp_enqueue_style', $style );
 		}
-		
 		foreach ($this->_ie_styles as $style)
 		{
 			call_user_func_array( 'wp_enqueue_style', $style['style'] );
